@@ -44,6 +44,49 @@ body {
 	border-radius: 16px 0px;
 }
 
+#search-cancel {
+	cursor: pointer;
+	background: none;
+	border: none;
+	position: absolute;
+	z-index: 10;
+	right: -12px;
+	font-size: 32px;
+	top: 11px;
+	color: #bcbcbc;
+}
+
+#search-wrapper {
+	position: relative;
+	outline:none;
+}
+
+#topic-suggestion {}
+
+#topic-suggestion ul {
+	position: relative;
+	left: -2px;
+	top: 2px;
+}
+
+#topic-suggestion ul li:hover {
+	background-color: #FA0033;
+	cursor: pointer;
+}
+
+#topic-suggestion ul li {
+	display: inline-block;
+	padding: 2px 7px;
+	background-color: #f36f8a;
+	color: #FFF;
+	margin: 2px;
+	font-size: 14px;
+	line-height: 14px;
+	text-align: center;
+	vertical-align: middle;
+	height: 18px;
+}
+
 #main-title {
 	width: 100%;
 	text-align: right;
@@ -60,14 +103,15 @@ body {
 
 #search-bar::placeholder {
 	color: #FA0033;
-	font-size:22px;
+	font-size: 22px;
 }
 
 #latest-title {
-	margin-top:128px;
+	margin-top: 128px;
 }
 
 /* Edit your header styles here */
+
 header {
 	font-family: sans-serif;
 	font-size: 20px;
@@ -80,6 +124,7 @@ header {
 	background-color: #424242;
 	color: white;
 }
+
 body {
 	box-sizing: border-box;
 	min-width: 200px;
@@ -87,6 +132,7 @@ body {
 	margin: 56px auto 0 auto;
 	padding: 45px;
 }
+
 @media (max-width: 767px) {
 	header {
 		font-size: 15px;

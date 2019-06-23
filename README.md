@@ -33,7 +33,7 @@ Adding a new *snip* is then very simple : save your note as a `.md` under the `s
 
 ```
 ./build.py
-git add .
+git add build/main.json
 git commit -m "new snip"
 git push
 ```

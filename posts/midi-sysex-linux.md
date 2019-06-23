@@ -19,5 +19,5 @@ amidi -p hw:2,0,0 -s dx7bank.syx
 Note : individual patches (.sysex) don't work
 
 
-TAGS : music dx7 volca fm
+TAGS : music dx7 volca fm midi
 DATE : 23 06 2019 4
