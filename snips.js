@@ -51,7 +51,8 @@ $(function() {
 						post.md = self.dataPrefix + post.md;
 						return post;
 					}).sort(function(prev, next) {
-						return prev.date > next.date;
+						console.log(prev.date, next.date);
+						return prev.date < next.date;
 					});
 					self.posts = posts.snips;
 				}

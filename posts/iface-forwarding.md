@@ -26,4 +26,4 @@ sudo iptables -t nat -A POSTROUTING -o tun0 -j MASQUERADE
 Now your VMs traffic can be forwarded through a OpenVPN interface. Postrouting to multiple interface is possible too, the deciding factor being the host's routing table (`route -n`)
 
 TAGS : ip forward forwarding routing route nat
-DATE : 23 06 2019
+DATE : 23 06 2019 3

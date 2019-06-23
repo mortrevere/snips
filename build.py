@@ -20,7 +20,8 @@ class MDPreprocessor():
         if chunks[0] == 'TAGS':
             self.tags = chunks[2:]
         elif chunks[0] == 'DATE':
-            self.date = time.mktime(datetime.datetime.strptime(line[7:].strip(), "%d %m %Y").timetuple())
+            offset = int(chunks[5]) if len(chunks) > 5 else 0
+            self.date = time.mktime(datetime.datetime.strptime(line[7:17].strip(), "%d %m %Y").timetuple()) + offset
         elif ''.join(chunks[0:2]) == 'Note:':
             self.md += '> ***Note*** : **' + line[7:].strip() + '**'
         else:

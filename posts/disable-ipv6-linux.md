@@ -6,4 +6,4 @@ sysctl -w net.ipv6.conf.all.disable_ipv6=1
 ```
 
 TAGS : network linux ipv6
-DATE : 23 06 2019
+DATE : 23 06 2019 2
