@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Snips</title>
+		<script src="res/vue.js"></script>
+		<script src="res/jquery-3.3.1.min.js"></script>
+		<link rel="stylesheet" href="style.css">
+		<script src="script.js"></script>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+		<script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
+		<script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@1/src/zero-md.min.js"></script>
+	</head>
+	<body>
+		<h1 id="main-title">Snips</h1>
+
+		<div id="app-snips">
+			<input id="search-bar" v-model="searchTerm" v-on:input="search" placeholder="Search for snippets, commands ..."/>
+
+			<div v-if="searchTerm == ''">
+				<h2 id="latest-title">Latest snips</h2>
+
+				<div v-for="post in posts" class="post">
+					<zero-md class="md" manual-render v-bind:src="post.md"></zero-md>
+				</div>
+			</div>
+			
+			<div v-else>
+				<h2 id="latest-title">Search results</h2>
+
+				<div v-for="post in searchedPosts" class="post">
+					<zero-md class="md" manual-render v-bind:src="post.md"></zero-md>
+				</div>
+			</div>
+		</div>
+
+	</body>
+</html>
