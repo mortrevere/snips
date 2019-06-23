@@ -22,3 +22,20 @@ cd snips
 ```
 
 This builds a JSON file under the `build/` dir, which then become the reference point for your *snip* repo. You can then host it (for free) on GitHub or wherever you see fit if you have a public CORS-compatible domain.
+
+**Snips are stored into the** `snips/` ** dir as simple markdown files.**
+
+They however carry additionnal features like date and tags embedding which allow for better searching. This is cleaned up by the build process and moved as metadata in the final build file.
+
+## Adding snips
+
+Adding a new *snip* is then very simple : save your note as a `.md` under the `snips/` dir, and :
+
+```
+./build.py
+git add .
+git commit -m "new snip"
+git push
+```
+
+Your build file is now updated on the repo and everyone can browse that new *snip*
