@@ -39,3 +39,6 @@ netplan apply
 ```
 ip a
 ```
+
+DATE : 24 06 2019
+TAGS : ip linux static netplan interfaces network ipv4
