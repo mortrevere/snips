@@ -50,6 +50,8 @@ $(function() {
 					posts.snips = posts.snips.map(function(post) {
 						post.md = self.dataPrefix + post.md;
 						return post;
+					}).sort(function(prev, next) {
+						return prev.date > next.date;
 					});
 					self.posts = posts.snips;
 				}
@@ -59,47 +61,3 @@ $(function() {
 	});
 
 });
-
-var ajax = {
-	base : 'http://',
-	call : function(method, URI, data, callback, onerror) {
-		var o = {
-			method : method,
-			url : this.base + URI
-		};
-
-		/*var token = cookies.get('X-Token');
-
-		 if (token) {
-		 o.headers = {
-		 'X-Token' : token
-		 };
-		 }*/
-
-		if ( typeof data === 'function') {
-			onerror = callback;
-			callback = data;
-		} else if ( typeof data === 'object') {
-			o.data = data;
-		}
-
-		function cbwrap(data) {
-			data = data.value ? data.value : data;
-			if (callback)
-				callback(data);
-		}
-
-		function failwrap(data) {
-			if (data.status === 401 && app.logout)
-				app.logout();
-
-			if (onerror)
-				onerror(data);
-		}
-
-		setTimeout(function() {
-			$.ajax(o).done(cbwrap).fail(failwrap);
-		}, 500);
-
-	}
-};
