@@ -39,6 +39,9 @@ body {
 
 .post {
 	margin: 32px 0;
+	border: 1px solid #dedede;
+	padding: 16px;
+	border-radius: 16px 0px;
 }
 
 #main-title {
