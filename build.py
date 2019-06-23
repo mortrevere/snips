@@ -4,7 +4,7 @@ import glob
 import time
 import datetime
 import json
-
+import base64
 
 posts_files = glob.glob("./posts/*.md")
 
@@ -27,7 +27,9 @@ class MDPreprocessor():
             self.md += line
 
     def render(self):
+        self.md = base64.b64encode(self.md)
         return {'md' : self.md, 'tags' : self.tags, 'date' : self.date}
+
     def json(self):
         return json.dumps(self.render())
 
