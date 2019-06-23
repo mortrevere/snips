@@ -39,3 +39,8 @@ git push
 ```
 
 Your build file is now updated on the repo and everyone can browse that new *snip*
+
+### TODO
+
+- Multi source implementation
+- Add author on each snip
