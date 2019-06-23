@@ -34,6 +34,8 @@ network:
 netplan apply
 ```
 
+Also, `netplan try` will apply the new configuration for about 2 minutes before reverting to the old one, which is always safer in remote-only environment.
+
 ## Verify operation
 
 ```
