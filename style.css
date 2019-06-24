@@ -180,3 +180,18 @@ body {
 		padding: 15px;
 	}
 }
+
+#wazzup {
+	position:fixed;
+	bottom:16px;
+	right:16px;
+	font-size:13px;
+	color:#f36f8a;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+#wazzup:hover {
+	color:#FA0033;
+	text-decoration:underline;
+}
