@@ -58,8 +58,8 @@ body {
 	right: 16px;
 	bottom: 4px;
 	font-size: 14px;
-	color:#bcbcbc;
-	display:none;
+	color: #bcbcbc;
+	display: none;
 }
 
 .post:hover .post-from {
@@ -68,7 +68,7 @@ body {
 
 .post .post-from a {
 	text-decoration: none;
-	color:#f36f8a;
+	color: #f36f8a;
 }
 
 .post .post-from a:hover {
@@ -105,8 +105,6 @@ body {
 	cursor: pointer;
 }
 
-
-
 #topic-suggestion ul li {
 	display: inline-block;
 	padding: 2px 7px;
@@ -124,7 +122,16 @@ body {
 #main-title {
 	width: 100%;
 	text-align: right;
-	padding: 8px;
+	padding: 8px 0 0 32px;
+}
+
+#main-subtitle {
+	width: 100%;
+	text-align: right;
+	padding: 0 0 8px 32px;
+	font-size: 16px;
+	color: #b4b4b4;
+	font-weight: normal;
 }
 
 #search-bar {
@@ -143,8 +150,6 @@ body {
 #latest-title {
 	margin-top: 128px;
 }
-
-/* Edit your header styles here */
 
 header {
 	font-family: sans-serif;
