@@ -32,8 +32,15 @@ They however carry additionnal features like date and tags embedding which allow
 Adding a new *snip* is then very simple : save your note as a `.md` under the `snips/` dir, and :
 
 ```
+./build-publish.sh
+```
+
+Which is a shortcut for :
+
+```
 ./build.py
 git add build/main.json
+git add snips/*
 git commit -m "new snip"
 git push
 ```

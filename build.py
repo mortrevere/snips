@@ -6,7 +6,7 @@ import datetime
 import json
 import base64
 
-posts_files = glob.glob("./posts/*.md")
+posts_files = glob.glob("./snips/*.md")
 
 class MDPreprocessor():
     def __init__(self):
