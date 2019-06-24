@@ -70,6 +70,7 @@ $(function () {
 				}).sort(function (prev, next) {
 					return prev.relevance < next.relevance;
 				});
+				window.location.hash = self.searchTerm;
 			},
 			clearSearch: function () {
 				this.searchTerm = '';
