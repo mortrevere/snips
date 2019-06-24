@@ -32,4 +32,4 @@ nslookup google.com | grep Server
 ```
 
 TAGS : dns server google opendns
-DATE : 24 06 2019 3
+DATE : 24 06 2019 1
