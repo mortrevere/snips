@@ -1,5 +1,7 @@
-var vueh = null;
+const SOURCES  = ['https://raw.githubusercontent.com/mortrevere/snips/master/build/main.json']
 
+
+var vueh = null;
 var colors = {
 	green: '#3CCC4E',
 	yellow: '#FFDC3A',
@@ -16,7 +18,8 @@ $(function () {
 			posts: [],
 			searchedPosts: [],
 			dataPrefix: 'data:text/markdown;base64, ',
-			searchTerm: ''
+			searchTerm: '',
+			sourceIndex: -1
 		},
 		computed: {
 			availableTags: function () {
@@ -41,15 +44,33 @@ $(function () {
 				var self = this;
 				if(typeof ev === "string")
 					self.searchTerm = ev;
+				relevance = [];
 				self.searchedPosts = self.posts.filter(function (post) {
-					if (!!~post.tags.indexOf(self.searchTerm)) return true;
+					if (!!~post.tags.indexOf(self.searchTerm)) {
+						relevance.push(10)
+						return true;
+					}
 					var re = new RegExp(self.searchTerm, "ig");
 					var md = atob(post.md.substr(self.dataPrefix.length));
-					if (md.match(re)) return true;
+					if (md.match(re)) {
+						relevance.push(3)
+						return true;
+					}
+				});
+				if(Math.max(...relevance) < 10) relevance = relevance.map(function(r) { return r+10; });
+				self.searchedPosts = self.searchedPosts.map(function(post, i) {
+					post.relevance = relevance[i];
+					return post;
+				}).sort(function(prev, next) {
+					return prev.relevance < next.relevance;
 				});
 			},
 			clearSearch: function() {
 				this.searchTerm = '';
+			},
+			getNextSource: function() {
+				this.sourceIndex++;
+				return SOURCES[this.sourceIndex];
 			}
 		},
 		updated: function () {
@@ -57,12 +78,11 @@ $(function () {
 			for (var i = 0; i < zmdlist.length; i++) {
 				zmdlist[i].render();
 			}
-
 		},
 		mounted: function () {
 			var self = this;
 			var client = new XMLHttpRequest();
-			client.open('GET', 'https://raw.githubusercontent.com/mortrevere/snips/master/build/main.json');
+			client.open('GET', self.getNextSource());
 			client.onreadystatechange = function () {
 				if (client.responseText) {
 					posts = JSON.parse(client.responseText);
@@ -75,6 +95,7 @@ $(function () {
 					});
 					self.posts = posts.snips;
 				}
+				//client.open('GET', self.getNextSource());
 			};
 			client.send();
 		}

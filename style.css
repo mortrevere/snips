@@ -44,6 +44,15 @@ body {
 	border-radius: 16px 0px;
 }
 
+.post.irrelevant {
+	opacity: .5;
+}
+
+
+.post.irrelevant:hover {
+	opacity: .8;
+}
+
 #search-cancel {
 	cursor: pointer;
 	background: none;

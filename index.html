@@ -40,7 +40,7 @@
 		<div v-else>
 			<h2 id="latest-title">Search results</h2>
 
-			<div v-for="post in searchedPosts" class="post">
+			<div v-for="post in searchedPosts" class="post" v-bind:class="{irrelevant : post.relevance < 9}">
 				<zero-md class="md" manual-render v-bind:src="post.md"></zero-md>
 			</div>
 		</div>
