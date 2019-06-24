@@ -101,7 +101,9 @@ $(function () {
 						post.from = { username: self.usernameFromSourceURL(self.currentSource), url: self.githubRepoFromSourceURL(self.currentSource) }
 						return post;
 					});
-					self.posts = self.posts.concat(posts.snips);
+					self.posts = self.posts.concat(posts.snips).sort(function (prev, next) {
+						return prev.date < next.date;
+					}); //to fix -> sort only once after all fetch (but Vue is acting up)
 					self.currentSource = self.getNextSource();
 				}
 			};
@@ -111,9 +113,7 @@ $(function () {
 					client.open('GET', self.currentSource);
 					client.send();
 				} else {
-					self.posts = self.posts.sort(function (prev, next) {
-						return prev.date < next.date;
-					});
+					//done
 				}
 			}
 
