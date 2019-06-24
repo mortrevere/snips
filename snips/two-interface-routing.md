@@ -21,5 +21,7 @@ The first line adds a new routing table to your system. Linux kernel supports up
 cat /etc/iproute2/rt_tables
 ```
 
+TAGS : linux routing ip interfaces
+DATE : 24 06 2019 2
 
 
