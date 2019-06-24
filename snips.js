@@ -120,6 +120,12 @@ $(function () {
 					client.send();
 				} else {
 					//done
+					if (window.location.hash) {
+						setTimeout(function () {
+							self.searchTerm = window.location.hash.substr(1);
+							self.search();
+						}, 300);
+					}
 				}
 			}
 
