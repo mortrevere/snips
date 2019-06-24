@@ -36,7 +36,7 @@ $(function () {
 					return { value: tag };
 				}).sort(function (prev, next) {
 					return tagsF[prev.value] < tagsF[next.value];
-				});
+				}).slice(0, 42);
 			}
 		},
 		methods: {
