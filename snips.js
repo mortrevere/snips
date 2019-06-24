@@ -1,4 +1,4 @@
-const SOURCES  = ['https://raw.githubusercontent.com/mortrevere/snips/master/build/main.json']
+const SOURCES = ['https://raw.githubusercontent.com/mortrevere/snips/master/build/main.json']
 
 
 var vueh = null;
@@ -19,7 +19,8 @@ $(function () {
 			searchedPosts: [],
 			dataPrefix: 'data:text/markdown;base64, ',
 			searchTerm: '',
-			sourceIndex: -1
+			sourceIndex: 0,
+			currentSource: ''
 		},
 		computed: {
 			availableTags: function () {
@@ -36,13 +37,13 @@ $(function () {
 					return { value: tag };
 				}).sort(function (prev, next) {
 					return tagsF[prev.value] < tagsF[next.value];
-				});
+				}).slice(0, 42);
 			}
 		},
 		methods: {
 			search: function (ev) {
 				var self = this;
-				if(typeof ev === "string")
+				if (typeof ev === "string")
 					self.searchTerm = ev;
 				relevance = [];
 				self.searchedPosts = self.posts.filter(function (post) {
@@ -57,20 +58,28 @@ $(function () {
 						return true;
 					}
 				});
-				if(Math.max(...relevance) < 10) relevance = relevance.map(function(r) { return r+10; });
-				self.searchedPosts = self.searchedPosts.map(function(post, i) {
+				if (Math.max(...relevance) < 10) relevance = relevance.map(function (r) { return r + 10; });
+				self.searchedPosts = self.searchedPosts.map(function (post, i) {
 					post.relevance = relevance[i];
 					return post;
-				}).sort(function(prev, next) {
+				}).sort(function (prev, next) {
 					return prev.relevance < next.relevance;
 				});
 			},
-			clearSearch: function() {
+			clearSearch: function () {
 				this.searchTerm = '';
 			},
-			getNextSource: function() {
-				this.sourceIndex++;
-				return SOURCES[this.sourceIndex];
+			getNextSource: function () {
+				if (this.sourceIndex < SOURCES.length - 1) {
+					this.sourceIndex++;
+					return SOURCES[this.sourceIndex];
+				} else return false;
+			},
+			usernameFromSourceURL: function (url) {
+				return url.split('https://raw.githubusercontent.com/').pop().split('/')[0];
+			},
+			githubRepoFromSourceURL: function (url) {
+				return 'https://github.com/' + url.split('https://raw.githubusercontent.com/').pop().split('master/build/main.json')[0];
 			}
 		},
 		updated: function () {
@@ -82,21 +91,33 @@ $(function () {
 		mounted: function () {
 			var self = this;
 			var client = new XMLHttpRequest();
-			client.open('GET', self.getNextSource());
+			self.currentSource = SOURCES[0];
+
 			client.onreadystatechange = function () {
-				if (client.responseText) {
+				if (client.responseText && self.currentSource) {
 					posts = JSON.parse(client.responseText);
 					posts.snips = posts.snips.map(function (post) {
 						post.md = self.dataPrefix + post.md;
+						post.from = { username: self.usernameFromSourceURL(self.currentSource), url: self.githubRepoFromSourceURL(self.currentSource) }
 						return post;
-					}).sort(function (prev, next) {
-						console.log(prev.date, next.date);
-						return prev.date < next.date;
 					});
-					self.posts = posts.snips;
+					self.posts = self.posts.concat(posts.snips).sort(function (prev, next) {
+						return prev.date < next.date;
+					}); //to fix -> sort only once after all fetch (but Vue is acting up)
+					self.currentSource = self.getNextSource();
 				}
-				//client.open('GET', self.getNextSource());
 			};
+
+			client.onload = function () {
+				if (self.currentSource) {
+					client.open('GET', self.currentSource);
+					client.send();
+				} else {
+					//done
+				}
+			}
+
+			client.open('GET', self.currentSource);
 			client.send();
 		}
 	});

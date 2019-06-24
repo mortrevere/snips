@@ -49,5 +49,5 @@ Your build file is now updated on the repo and everyone can browse that new *sni
 
 ### TODO
 
-- Multi source implementation
-- Add author on each snip
+- ~~Multi source implementation~~
+- ~~Add author on each snip~~
