@@ -1,4 +1,4 @@
-#Correct routing with two interfaces reaching the same subnet
+# Correct routing with two interfaces reaching the same subnet
 
 In the case where you have two interfaces that can reach the same subnet, you can get connectivity troubles.
 Imagine having two IP addresses, as 10.0.0.10 and 192.168.0.10. Both interfaces can be routed via a gateway to a third subnet, like 10.10.10.0/24. 
