@@ -51,10 +51,15 @@ $(function () {
 						relevance.push(10)
 						return true;
 					}
-					var re = new RegExp(self.searchTerm, "ig");
+					var re = new RegExp('.*' + self.searchTerm, "ig");
 					var md = atob(post.md.substr(self.dataPrefix.length));
-					if (md.match(re)) {
-						relevance.push(3)
+					var match = md.match(re);
+					console.log(match);
+					if (match) {
+						if (match[0][0] == '#') //if matched on a markdown header
+							relevance.push(7)
+						else
+							relevance.push(3)
 						return true;
 					}
 				});
