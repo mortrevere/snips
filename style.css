@@ -42,15 +42,37 @@ body {
 	border: 1px solid #dedede;
 	padding: 16px;
 	border-radius: 16px 0px;
+	position: relative;
 }
 
 .post.irrelevant {
 	opacity: .5;
 }
 
-
 .post.irrelevant:hover {
 	opacity: .8;
+}
+
+.post .post-from {
+	position: absolute;
+	right: 16px;
+	bottom: 4px;
+	font-size: 14px;
+	color:#bcbcbc;
+	display:none;
+}
+
+.post:hover .post-from {
+	display: block;
+}
+
+.post .post-from a {
+	text-decoration: none;
+	color:#f36f8a;
+}
+
+.post .post-from a:hover {
+	color: #FA0033;
 }
 
 #search-cancel {
@@ -67,7 +89,7 @@ body {
 
 #search-wrapper {
 	position: relative;
-	outline:none;
+	outline: none;
 }
 
 #topic-suggestion {}
@@ -83,6 +105,8 @@ body {
 	cursor: pointer;
 }
 
+
+
 #topic-suggestion ul li {
 	display: inline-block;
 	padding: 2px 7px;
@@ -90,10 +114,11 @@ body {
 	color: #FFF;
 	margin: 2px;
 	font-size: 14px;
-	line-height: 14px;
+	line-height: 16px;
 	text-align: center;
 	vertical-align: middle;
 	height: 18px;
+	border-radius: 1px;
 }
 
 #main-title {

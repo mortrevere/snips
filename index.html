@@ -33,6 +33,10 @@
 			<h2 id="latest-title">Latest snips</h2>
 
 			<div v-for="post in posts" class="post">
+				<div class="post-from">
+					from <a v-bind:href="post.from.url" target="_blank">{{post.from.username}}</a>
+				</div>
+
 				<zero-md class="md" manual-render v-bind:src="post.md"></zero-md>
 			</div>
 		</div>
@@ -41,6 +45,9 @@
 			<h2 id="latest-title">Search results</h2>
 
 			<div v-for="post in searchedPosts" class="post" v-bind:class="{irrelevant : post.relevance < 9}">
+				<div class="post-from">
+					from <a v-bind:href="post.from.url" target="_blank">{{post.from.username}}</a>
+				</div>
 				<zero-md class="md" manual-render v-bind:src="post.md"></zero-md>
 			</div>
 		</div>
