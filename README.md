@@ -84,7 +84,7 @@ Your build file is now updated on the repo and everyone can browse that new *sni
 ```
 
 This will be used as a starting point for other utils and to keep track of the state of your snip build.
-
+The `BUILT` column let you know if you have any differences between your local .md files and your build file.
 
 ### TODO
 
