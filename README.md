@@ -45,7 +45,11 @@ git commit -m "new snip"
 git push
 ```
 
-Available commands for `snips.py` are :
+Your build file is now updated on the repo and everyone can browse that new *snip*
+
+## New features
+
+Current available commands for `snips.py` are :
 
 ```
 ./snips.py list
@@ -55,12 +59,9 @@ Available commands for `snips.py` are :
 ./snips.py build publish
 ```
 
-Your build file is now updated on the repo and everyone can browse that new *snip*
-
-## New features
 
 ```
-↳ ./snips.py list                                                                                                                                                                                                    98%  64%    11:56:28
+↳ ./snips.py list
 +-----+------------+-------+--------------------------------------------------------------+
 | ID  | DATE       | BUILT | TITLE                                                        |
 +-----+------------+-------+--------------------------------------------------------------+
