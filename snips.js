@@ -1,4 +1,4 @@
-const SOURCES = ['https://raw.githubusercontent.com/mortrevere/snips/master/build/main.json']
+const SOURCES = ['https://raw.githubusercontent.com/mortrevere/snips/master/build/main.json', 'https://raw.githubusercontent.com/LysandreJik/snips/master/build/main.json']
 
 
 var vueh = null;
