@@ -109,20 +109,19 @@ class CLIParser():
         printable_posts = []
         max_title_width = 0
         has_unbuilt = False
+        all_md = [p['md'] for p in built]
+
         for index, post in enumerate(posts):
             date = datetime.datetime.utcfromtimestamp(post['date']).strftime('%d-%m-%Y')
             md = base64.b64decode(post['md'].encode('utf-8')).decode('utf-8');
             title = md.strip().split('\n')[0][1:].strip()
             max_title_width = len(title) if len(title) > max_title_width else max_title_width
-            local = True
             pub = 'no '
-            if post['md'] in [p['md'] for p in built]:
+            if post['md'] in all_md:
                 pub = 'yes'
             else:
                 has_unbuilt = True
-
             printable_posts += [{'id' : str(index), 'date' : date, 'title' : title, 'pub' : pub}]
-
 
         print('+' + '-'*5 + '+' + '-'*12 + '+' + '-'*7 + '+' + '-'*(max_title_width+2) + '+')
         print('| ID  | DATE       | BUILT | TITLE' + ' '*(max_title_width-4) + '|')
