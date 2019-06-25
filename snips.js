@@ -20,35 +20,26 @@ var vueh = new Vue({
 		relevantSearchResultsCount : 0
 	},
 	computed: {
-		availableTags: function () {
+		availableTags: function() {
 			tagsF = {};
-			this.posts.forEach(function (post) {
-				post.tags.forEach(function (tag) {
-					if (tagsF[tag] === undefined)
-						tagsF[tag] = 1;
-					else
-						tagsF[tag]++;
-				})
+			this.posts.forEach(post => {
+				//create or add into object
+				post.tags.forEach(tag => ((tagsF[tag] === undefined) ? tagsF[tag] = 1 : tagsF[tag]++));
 			});
-			return Object.keys(tagsF).map(function (tag) {
-				return { value: tag };
-			}).sort(function (prev, next) {
-				return tagsF[prev.value] < tagsF[next.value];
-			}).slice(0, 42);
+			return Object.keys(tagsF).map(tag => ({ value: tag })).sort((prev, next) => tagsF[prev.value] < tagsF[next.value]).slice(0, 42);
 		}
 	},
 	methods: {
 		search: function (ev) {
 			var self = this;
-			if (typeof ev === "string")
-				self.searchTerm = ev;
+			if (typeof ev === "string") self.searchTerm = ev;
 			if (self.searchTerm.length < 2) return;
 
 			var relevance = [];
 			var searchTerms = self.searchTerm.split(' ');
 
-			self.searchedPosts = self.posts.filter(function (post) {
-				var relevanceScore = searchTerms.reduce(function (prev, next) {
+			self.searchedPosts = self.posts.filter(post => {
+				var relevanceScore = searchTerms.reduce((prev, next) => {
 					if (!!~post.tags.indexOf(next)) return prev + 10 - searchTerms.length;
 					else return prev;
 				}, 0);
@@ -57,7 +48,6 @@ var vueh = new Vue({
 					var re = new RegExp('.*' + self.searchTerm, "ig");
 					var md = atob(post.md.substr(self.dataPrefix.length));
 					var match = md.match(re);
-					//console.log(match);
 					if (match) relevanceScore += (match[0][0] == '#' ? 7 : 3);
 				}
 				if(relevanceScore) {
@@ -66,29 +56,28 @@ var vueh = new Vue({
 				}
 			});
 
-			if (Math.max(...relevance) < 10) relevance = relevance.map(function (r) { return r + 10; });
-			self.searchedPosts = self.searchedPosts.map(function (post, i) {
+			if (Math.max(...relevance) < 10) relevance = relevance.map(r => r + 10);
+			self.searchedPosts = self.searchedPosts.map((post, i) => {
 				post.relevance = relevance[i];
 				return post;
-			}).sort(function (prev, next) {
+			}).sort((prev, next) => {
 				return prev.relevance < next.relevance;
 			});
 			
 			//lower the relevance threshold to include next result(s) when finding too few matches (helps weighting poorly tagged snips)
-			if(relevance.filter(function(r) { return r >= self.relevanceThreshold}).length < self.minNumberOfResults && relevance.length >= self.minNumberOfResults) {
-				self.relevanceThreshold = relevance.sort(function(a,b) { return b-a; })[self.minNumberOfResults-1];
+			if(relevance.filter(r => r >= self.relevanceThreshold).length < self.minNumberOfResults && relevance.length >= self.minNumberOfResults) {
+				self.relevanceThreshold = relevance.sort((a,b) => b-a)[self.minNumberOfResults-1];
 			}
-			self.relevantSearchResultsCount = relevance.filter(function(r) { return r >= self.relevanceThreshold; }).length;
-	
+			self.relevantSearchResultsCount = relevance.filter(r => r >= self.relevanceThreshold).length;
 			window.location.hash = self.searchTerm;
 		},
-		clearSearch: function () {
+		clearSearch: function() {
 			this.searchTerm = '';
 			window.location.hash = '';
 			history.pushState(null, null, ' '); //remove the hash from the URL
 		},
-		fetchPosts: async function () {
-			const postsPromises = SOURCES.map(async (source) => {
+		fetchPosts: async function() {
+			const postsPromises = SOURCES.map(async source => {
 				const res = await fetch(source);
 				if (!res.ok) {
 					return null;
@@ -100,7 +89,7 @@ var vueh = new Vue({
 					url: this.githubRepoFromSourceURL(source),
 				};
 
-				return posts.snips.map((post) => {
+				return posts.snips.map(post => {
 					post.md = this.dataPrefix + post.md;
 					post.from = from;
 					return post;
@@ -112,23 +101,20 @@ var vueh = new Vue({
 				.flat()
 				.sort((prev, next) => prev.date < next.date);
 		},
-		usernameFromSourceURL: function (url) {
-			return url.split('https://raw.githubusercontent.com/').pop().split('/')[0];
-		},
-		githubRepoFromSourceURL: function (url) {
-			return 'https://github.com/' + url.split('https://raw.githubusercontent.com/').pop().split('master/build/main.json')[0];
-		}
+		usernameFromSourceURL: url => (url.split('https://raw.githubusercontent.com/').pop().split('/')[0]),
+		githubRepoFromSourceURL: url => ('https://github.com/' + url.split('https://raw.githubusercontent.com/').pop().split('master/build/main.json')[0])
+		
 	},
-	updated: function () {
+	updated: function() {
 		var zmdlist = document.getElementsByClassName('md');
 		for (var i = 0; i < zmdlist.length; i++) {
 			zmdlist[i].render();
 		}
 	},
-	mounted: function () {
-		this.fetchPosts().then(() => {
+	mounted: function() {
+		this.fetchPosts().then(_ => {
 			if (window.location.hash) {
-				setTimeout(() => {
+				setTimeout(_ => {
 					this.searchTerm = decodeURIComponent(window.location.hash.substr(1));
 					this.search();
 				}, 300);
