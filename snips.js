@@ -15,8 +15,6 @@ var vueh = new Vue({
 		searchedPosts: [],
 		dataPrefix: 'data:text/markdown;base64, ',
 		searchTerm: '',
-		sourceIndex: 0,
-		currentSource: '',
 		relevanceThreshold : 9,
 		minNumberOfResults : 2,
 		relevantSearchResultsCount : 0
@@ -89,12 +87,30 @@ var vueh = new Vue({
 			window.location.hash = '';
 			history.pushState(null, null, ' '); //remove the hash from the URL
 		},
-		getNextSource: function () {
-			if (this.sourceIndex < SOURCES.length) {
-				console.log(this.sourceIndex, SOURCES[this.sourceIndex]);
-				this.sourceIndex++;
-				return SOURCES[this.sourceIndex];
-			} else return false;
+		fetchPosts: async function () {
+			const postsPromises = SOURCES.map(source =>
+				fetch(source).then(res => res.status === 200 ? res.json() : Promise.resolve(undefined)),
+			);
+
+			this.posts = (await Promise.all(postsPromises))
+				.flatMap((posts, sourceIdx) => {
+					if (posts === undefined) {
+						return;
+					}
+
+					const source = SOURCES[sourceIdx];
+					const from = {
+						username: this.usernameFromSourceURL(source),
+						url: this.githubRepoFromSourceURL(source),
+					};
+
+					return posts.snips.map((post) => {
+						post.md = this.dataPrefix + post.md;
+						post.from = from;
+						return post;
+					});
+				})
+				.sort((prev, next) => prev.date < next.date);
 		},
 		usernameFromSourceURL: function (url) {
 			return url.split('https://raw.githubusercontent.com/').pop().split('/')[0];
@@ -110,39 +126,13 @@ var vueh = new Vue({
 		}
 	},
 	mounted: function () {
-		var self = this;
-		var client = new XMLHttpRequest();
-		self.currentSource = SOURCES[0];
-
-		client.onreadystatechange = function () {
-			if (client.readyState === XMLHttpRequest.DONE && client.status === 200 && client.responseText && self.currentSource) {
-
-				posts = JSON.parse(client.responseText);
-				posts.snips = posts.snips.map(function (post) {
-					post.md = self.dataPrefix + post.md;
-					post.from = { username: self.usernameFromSourceURL(self.currentSource), url: self.githubRepoFromSourceURL(self.currentSource) }
-					return post;
-				});
-				self.posts = self.posts.concat(posts.snips).sort(function (prev, next) {
-					return prev.date < next.date;
-				}); //to fix -> sort only once after all fetch (but Vue is acting up)
-				self.currentSource = self.getNextSource();
-				if (self.currentSource) {
-					client.open('GET', self.currentSource);
-					client.send();
-				} else {
-					//done
-					if (window.location.hash) {
-						setTimeout(function () {
-							self.searchTerm = decodeURIComponent(window.location.hash.substr(1));
-							self.search();
-						}, 300);
-					}
-				}
+		this.fetchPosts().then(() => {
+			if (window.location.hash) {
+				setTimeout(() => {
+					this.searchTerm = decodeURIComponent(window.location.hash.substr(1));
+					this.search();
+				}, 300);
 			}
-		};
-
-		client.open('GET', self.currentSource);
-		client.send();
+		});
 	}
 });
