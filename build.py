@@ -5,6 +5,7 @@ import time
 import datetime
 import json
 import base64
+import os
 
 posts_files = glob.glob("./snips/*.md")
 
@@ -43,5 +44,8 @@ for post_file in posts_files:
             processor.inline(line)
         posts.append(processor.render())
 
+if not os.path.exists('build'):
+    os.makedirs('build')
+        
 with open('build/main.json','w') as h:
     h.write(json.dumps({'snips' : posts }))
