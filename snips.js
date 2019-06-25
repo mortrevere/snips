@@ -70,6 +70,8 @@ var vueh = new Vue({
 		},
 		clearSearch: function () {
 			this.searchTerm = '';
+			window.location.hash = '';
+			history.pushState("", document.title, window.location.pathname + window.location.search); //remove the hash
 		},
 		getNextSource: function () {
 			if (this.sourceIndex < SOURCES.length) {
