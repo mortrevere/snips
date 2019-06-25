@@ -11,7 +11,7 @@
 	<script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@1/src/zero-md.min.js"></script>
 	<script src="res/vue.js"></script>
 	<script src="snips.js" defer></script>
-	
+
 </head>
 
 <body>
@@ -42,9 +42,12 @@
 		</div>
 
 		<div v-else>
-			<h2 id="latest-title">Search results</h2>
+			<h2 id="latest-title">
+				Search results
+				<span title="# of most relevant snips/total snips matching" id="search-results-count">({{relevantSearchResultsCount}}/{{searchedPosts.length}})</span>
+			</h2>
 
-			<div v-for="post in searchedPosts" class="post" v-bind:class="{irrelevant : post.relevance < 9}">
+			<div v-for="post in searchedPosts" class="post" v-bind:class="{irrelevant : post.relevance < relevanceThreshold}">
 				<div class="post-from">
 					from <a v-bind:href="post.from.url" target="_blank">{{post.from.username}}</a>
 				</div>

@@ -16,7 +16,10 @@ var vueh = new Vue({
 		dataPrefix: 'data:text/markdown;base64, ',
 		searchTerm: '',
 		sourceIndex: 0,
-		currentSource: ''
+		currentSource: '',
+		relevanceThreshold : 9,
+		minNumberOfResults : 2,
+		relevantSearchResultsCount : 0
 	},
 	computed: {
 		availableTags: function () {
@@ -41,24 +44,30 @@ var vueh = new Vue({
 			var self = this;
 			if (typeof ev === "string")
 				self.searchTerm = ev;
-			relevance = [];
+			if (self.searchTerm.length < 2) return;
+
+			var relevance = [];
+			var searchTerms = self.searchTerm.split(' ');
+
 			self.searchedPosts = self.posts.filter(function (post) {
-				if (!!~post.tags.indexOf(self.searchTerm)) {
-					relevance.push(10)
-					return true;
+				var relevanceScore = searchTerms.reduce(function (prev, next) {
+					if (!!~post.tags.indexOf(next)) return prev + 10 - searchTerms.length;
+					else return prev;
+				}, 0);
+				
+				if (self.searchTerm.length > 3) {
+					var re = new RegExp('.*' + self.searchTerm, "ig");
+					var md = atob(post.md.substr(self.dataPrefix.length));
+					var match = md.match(re);
+					//console.log(match);
+					if (match) relevanceScore += (match[0][0] == '#' ? 7 : 3);
 				}
-				var re = new RegExp('.*' + self.searchTerm, "ig");
-				var md = atob(post.md.substr(self.dataPrefix.length));
-				var match = md.match(re);
-				//console.log(match);
-				if (match) {
-					if (match[0][0] == '#') //if matched on a markdown header
-						relevance.push(7)
-					else
-						relevance.push(3)
+				if(relevanceScore) {
+					relevance.push(relevanceScore);
 					return true;
 				}
 			});
+
 			if (Math.max(...relevance) < 10) relevance = relevance.map(function (r) { return r + 10; });
 			self.searchedPosts = self.searchedPosts.map(function (post, i) {
 				post.relevance = relevance[i];
@@ -66,6 +75,13 @@ var vueh = new Vue({
 			}).sort(function (prev, next) {
 				return prev.relevance < next.relevance;
 			});
+			
+			//lower the relevance threshold to include next result(s) when finding too few matches (helps weighting poorly tagged snips)
+			if(relevance.filter(function(r) { return r >= self.relevanceThreshold}).length < self.minNumberOfResults && relevance.length >= self.minNumberOfResults) {
+				self.relevanceThreshold = relevance.sort(function(a,b) { return b-a; })[self.minNumberOfResults-1];
+			}
+			self.relevantSearchResultsCount = relevance.filter(function(r) { return r >= self.relevanceThreshold; }).length;
+	
 			window.location.hash = self.searchTerm;
 		},
 		clearSearch: function () {

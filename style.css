@@ -94,6 +94,11 @@ body {
 
 #topic-suggestion {}
 
+#search-results-count {
+	font-size:14px;
+	color:#424242;
+}
+
 #topic-suggestion ul {
 	position: relative;
 	left: -2px;
