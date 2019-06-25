@@ -71,7 +71,7 @@ var vueh = new Vue({
 		clearSearch: function () {
 			this.searchTerm = '';
 			window.location.hash = '';
-			history.pushState("", document.title, window.location.pathname + window.location.search); //remove the hash
+			history.pushState(null, null, ' '); //remove the hash from the URL
 		},
 		getNextSource: function () {
 			if (this.sourceIndex < SOURCES.length) {
