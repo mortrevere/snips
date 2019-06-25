@@ -50,7 +50,7 @@ var vueh = new Vue({
 				var re = new RegExp('.*' + self.searchTerm, "ig");
 				var md = atob(post.md.substr(self.dataPrefix.length));
 				var match = md.match(re);
-				console.log(match);
+				//console.log(match);
 				if (match) {
 					if (match[0][0] == '#') //if matched on a markdown header
 						relevance.push(7)
@@ -72,7 +72,8 @@ var vueh = new Vue({
 			this.searchTerm = '';
 		},
 		getNextSource: function () {
-			if (this.sourceIndex < SOURCES.length - 1) {
+			if (this.sourceIndex < SOURCES.length) {
+				console.log(this.sourceIndex, SOURCES[this.sourceIndex]);
 				this.sourceIndex++;
 				return SOURCES[this.sourceIndex];
 			} else return false;
@@ -96,7 +97,8 @@ var vueh = new Vue({
 		self.currentSource = SOURCES[0];
 
 		client.onreadystatechange = function () {
-			if (client.responseText && self.currentSource) {
+			if (client.readyState === XMLHttpRequest.DONE && client.status === 200 && client.responseText && self.currentSource) {
+
 				posts = JSON.parse(client.responseText);
 				posts.snips = posts.snips.map(function (post) {
 					post.md = self.dataPrefix + post.md;
@@ -107,23 +109,20 @@ var vueh = new Vue({
 					return prev.date < next.date;
 				}); //to fix -> sort only once after all fetch (but Vue is acting up)
 				self.currentSource = self.getNextSource();
-			}
-		};
-
-		client.onload = function () {
-			if (self.currentSource) {
-				client.open('GET', self.currentSource);
-				client.send();
-			} else {
-				//done
-				if (window.location.hash) {
-					setTimeout(function () {
-						self.searchTerm = window.location.hash.substr(1);
-						self.search();
-					}, 300);
+				if (self.currentSource) {
+					client.open('GET', self.currentSource);
+					client.send();
+				} else {
+					//done
+					if (window.location.hash) {
+						setTimeout(function () {
+							self.searchTerm = decodeURIComponent(window.location.hash.substr(1));
+							self.search();
+						}, 300);
+					}
 				}
 			}
-		}
+		};
 
 		client.open('GET', self.currentSource);
 		client.send();
