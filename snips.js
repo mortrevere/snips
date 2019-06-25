@@ -1,13 +1,5 @@
 const SOURCES = ['https://raw.githubusercontent.com/mortrevere/snips/master/build/main.json', 'https://raw.githubusercontent.com/LysandreJik/snips/master/build/main.json']
 
-var colors = {
-	green: '#3CCC4E',
-	yellow: '#FFDC3A',
-	red: '#FA0033',
-	white: '#FFF'
-};
-
-
 var vueh = new Vue({
 	el: '#app-snips',
 	data: {
