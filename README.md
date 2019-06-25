@@ -18,7 +18,7 @@ To do that :
 ```
 git clone https://github.com/mortrevere/snips.git
 cd snips
-./build.py
+./snips.py build
 ```
 
 This builds a JSON file under the `build/` dir, which then become the reference point for your *snip* repo. You can then host it (for free) on GitHub or wherever you see fit if you have a public CORS-compatible domain.
@@ -56,6 +56,35 @@ Available commands for `snips.py` are :
 ```
 
 Your build file is now updated on the repo and everyone can browse that new *snip*
+
+## New features
+
+```
+↳ ./snips.py list                                                                                                                                                                                                    98%  64%    11:56:28
++-----+------------+-------+--------------------------------------------------------------+
+| ID  | DATE       | BUILT | TITLE                                                        |
++-----+------------+-------+--------------------------------------------------------------+
+|   0 | 23-06-2019 |  yes  | Full docker cleanup                                          |
+|   1 | 23-06-2019 |  yes  | Get your CPU temp on Linux                                   |
+|   2 | 23-06-2019 |  yes  | DHCP tools on Linux                                          |
+|   3 | 22-06-2019 |  yes  | Disable IPv6 on Linux                                        |
+|   4 | 23-06-2019 |  yes  | List of DNS servers                                          |
+|   5 | 23-06-2019 |  yes  | Customize the docker ps output                               |
+|   6 | 22-06-2019 |  yes  | Turn on forwarding on linux                                  |
+|   7 | 23-06-2019 |  yes  | HTML5 minimal document                                       |
+|   8 | 22-06-2019 |  yes  | Set up IP forwarding on a Linux host                         |
+|   9 | 23-06-2019 |  yes  | Kill processes based on their instanciation args             |
+|  10 | 23-06-2019 |  yes  | Setup MariaDB / MySQL server                                 |
+|  11 | 22-06-2019 |  yes  | How to send MIDI sysex messages on Linux and program a DX7   |
+|  12 | 23-06-2019 |  no   | Using netcat                                                 |
+|  13 | 23-06-2019 |  yes  | Cleanup Openstack                                            |
+|  14 | 23-06-2019 |  yes  | Openstack flavors                                            |
+|  15 | 25-04-2019 |  yes  | Youtube to MP3 on Linux                                      |
++-----+------------+-------+--------------------------------------------------------------+
+```
+
+This will be used as a starting point for other utils and to keep track of the state of your snip build.
+
 
 ### TODO
 
