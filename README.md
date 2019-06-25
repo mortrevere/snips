@@ -32,22 +32,34 @@ They however carry additionnal features like date and tags embedding which allow
 Adding a new *snip* is then very simple : save your note as a `.md` under the `snips/` dir, and :
 
 ```
-./build-publish.sh
+./snips.py build publish
 ```
 
 Which is a shortcut for :
 
 ```
-./build.py
+./snips.py build
 git add build/main.json
 git add snips/*
 git commit -m "new snip"
 git push
 ```
 
+Available commands for `snips.py` are :
+
+```
+./snips.py list
+./snips.py build
+./snips.py publish
+
+./snips.py build publish
+```
+
 Your build file is now updated on the repo and everyone can browse that new *snip*
 
 ### TODO
 
+- snip client hotlinking
+- add `snips.py remove <id>` to remove a snip from the build
 - ~~Multi source implementation~~
 - ~~Add author on each snip~~
