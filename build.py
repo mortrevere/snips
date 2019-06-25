@@ -29,7 +29,7 @@ class MDPreprocessor():
             self.md += line
 
     def render(self):
-        self.md = base64.b64encode(self.md)
+        self.md = base64.b64encode(self.md.encode('utf-8')).decode('utf-8')
         return {'md' : self.md, 'tags' : self.tags, 'date' : self.date}
 
     def json(self):
