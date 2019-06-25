@@ -89,7 +89,7 @@ var vueh = new Vue({
 		},
 		fetchPosts: async function () {
 			const postsPromises = SOURCES.map(source =>
-				fetch(source).then(res => res.status === 200 ? res.json() : Promise.resolve(undefined)),
+				fetch(source).then(res => res.ok ? res.json() : Promise.resolve(undefined)),
 			);
 
 			this.posts = (await Promise.all(postsPromises))
