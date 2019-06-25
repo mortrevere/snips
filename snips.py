@@ -7,7 +7,6 @@ import json
 import base64
 import os
 import sys
-#from datetime import datetime
 
 posts_files = sorted(glob.glob("./snips/*.md"))
 posts = []
@@ -18,13 +17,13 @@ if not os.path.exists('build'):
 
 with open('build/main.json') as build:
     built = json.load(build)['snips']
-    #print(built)
 
 class MDPreprocessor():
-    def __init__(self):
+    def __init__(self, filename):
         self.tags = []
         self.md = ''
         self.date = ''
+        self.filename = filename
         pass
 
     def inline(self, line):
@@ -40,6 +39,16 @@ class MDPreprocessor():
             self.md += line
 
     def render(self):
+        if len(self.tags) == 0:
+            print('\n>> ERR : missing TAGS for {}, ignoring the whole snip.\n'.format(self.filename))
+            return False
+        elif self.date == '':
+            today = datetime.datetime.today()
+            today_readable = today.strftime('%d %m %Y')
+            today_timestamp = time.mktime(datetime.datetime.strptime(today_readable, "%d %m %Y").timetuple())
+            self.date = today_timestamp;
+            print('>> WARN : Missing DATE for {}, assuming today ({})'.format(self.filename, today_readable))
+
         self.md = base64.b64encode(self.md.encode('utf-8')).decode('utf-8')
         return {'md' : self.md, 'tags' : self.tags, 'date' : self.date}
 
@@ -48,10 +57,11 @@ class MDPreprocessor():
 
 for post_file in posts_files:
     with open(post_file) as h:
-        processor = MDPreprocessor()
+        processor = MDPreprocessor(post_file)
         for line in h:
             processor.inline(line)
-        posts.append(processor.render())
+        snip_object = processor.render()
+        if snip_object != False: posts.append(snip_object)
 
 ###
 
@@ -73,7 +83,7 @@ class CLIParser():
             self.cmd_publish()
 
     def cmd_publish(self):
-        git = os.popen('git add build/main.json && git add snips/*.md && git commit -m "new snip" && git push').read()
+        git = os.popen('git add build/main.json && git commit -m "new snip" && git push').read()
         print(git)
         remote_url = os.popen('git config --get remote.origin.url').read().split('/')
         github_user = remote_url[3]
