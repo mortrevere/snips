@@ -88,28 +88,28 @@ var vueh = new Vue({
 			history.pushState(null, null, ' '); //remove the hash from the URL
 		},
 		fetchPosts: async function () {
-			const postsPromises = SOURCES.map(source =>
-				fetch(source).then(res => res.ok ? res.json() : Promise.resolve(undefined)),
-			);
+			const postsPromises = SOURCES.map(async (source) => {
+				const res = await fetch(source);
+				if (!res.ok) {
+					return null;
+				}
+
+				const posts = await res.json();
+				const from = {
+					username: this.usernameFromSourceURL(source),
+					url: this.githubRepoFromSourceURL(source),
+				};
+
+				return posts.snips.map((post) => {
+					post.md = this.dataPrefix + post.md;
+					post.from = from;
+					return post;
+				});
+			});
 
 			this.posts = (await Promise.all(postsPromises))
-				.flatMap((posts, sourceIdx) => {
-					if (posts === undefined) {
-						return;
-					}
-
-					const source = SOURCES[sourceIdx];
-					const from = {
-						username: this.usernameFromSourceURL(source),
-						url: this.githubRepoFromSourceURL(source),
-					};
-
-					return posts.snips.map((post) => {
-						post.md = this.dataPrefix + post.md;
-						post.from = from;
-						return post;
-					});
-				})
+				.filter(posts => posts !== null)
+				.flat()
 				.sort((prev, next) => prev.date < next.date);
 		},
 		usernameFromSourceURL: function (url) {
