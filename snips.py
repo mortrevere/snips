@@ -98,6 +98,7 @@ class CLIParser():
     def cmd_list(self):
         printable_posts = []
         max_title_width = 0
+        has_unbuilt = False
         for index, post in enumerate(posts):
             date = datetime.datetime.utcfromtimestamp(post['date']).strftime('%d-%m-%Y')
             md = base64.b64decode(post['md'].encode('utf-8')).decode('utf-8');
@@ -107,6 +108,9 @@ class CLIParser():
             pub = 'no '
             if post['md'] in [p['md'] for p in built]:
                 pub = 'yes'
+            else:
+                has_unbuilt = True
+
             printable_posts += [{'id' : str(index), 'date' : date, 'title' : title, 'pub' : pub}]
 
 
@@ -117,6 +121,14 @@ class CLIParser():
             print('| ' + '{0:>3}'.format(post['id']) + ' | ' + post['date'] + ' |  ' + post['pub'] + '  | ', end='')
             print('{0: <{width}}'.format(post['title'], width=max_title_width) + ' |')
         print('+' + '-'*5 + '+' + '-'*12 + '+' + '-'*7 + '+' + '-'*(max_title_width+2) + '+')
+        if has_unbuilt:
+             while True:
+                try:
+                    prompt = input(">> You have unbuilt snips, build them ? [Y/n] : ")
+                    return self.cmd_build() if prompt in ('', 'y', 'Y') else False;
+                except KeyboardInterrupt:
+                    sys.exit()
+            #print('>> You have some snips not included in your current build. Use : \n\t ./snips.py build \n>> to build.')
 
 
 
