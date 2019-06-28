@@ -49,7 +49,7 @@
 
 			<div v-for="post in searchedPosts" class="post" v-bind:class="{irrelevant : post.relevance < relevanceThreshold}">
 				<div class="post-from">
-					from <a v-bind:href="post.from.url" target="_blank">{{post.from.username}}</a>
+					from <a v-bind:href="post.from.url" target="_blank">{{post.from.username}}</a> ({{post.relevance}})
 				</div>
 				<zero-md class="md" manual-render v-bind:src="post.md"></zero-md>
 			</div>

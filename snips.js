@@ -25,23 +25,27 @@ var vueh = new Vue({
 		search: function (ev) {
 			var self = this;
 			if (typeof ev === "string") self.searchTerm = ev;
+			var searchTerm = self.searchTerm.trim();
 			if (self.searchTerm.length < 2) return;
 
 			var relevance = [];
-			var searchTerms = self.searchTerm.split(' ');
+			var searchTerms = searchTerm.split(' ');
 
 			self.searchedPosts = self.posts.filter(post => {
 				var relevanceScore = searchTerms.reduce((prev, next) => {
-					if (!!~post.tags.indexOf(next)) return prev + 10 - searchTerms.length;
-					else return prev;
+					var termScore = 0;
+					if (!!~post.tags.indexOf(next)) termScore = 10 - searchTerms.length;
+
+					if (searchTerm.length > 3) {
+						var re = new RegExp('.*' + next, "ig");
+						var md = atob(post.md.substr(self.dataPrefix.length));
+						var match = md.match(re);
+						if (match) termScore += (match[0][0] == '#' ? 7 : 3);
+					}
+
+					return prev + termScore;
 				}, 0);
 				
-				if (self.searchTerm.length > 3) {
-					var re = new RegExp('.*' + self.searchTerm, "ig");
-					var md = atob(post.md.substr(self.dataPrefix.length));
-					var match = md.match(re);
-					if (match) relevanceScore += (match[0][0] == '#' ? 7 : 3);
-				}
 				if(relevanceScore) {
 					relevance.push(relevanceScore);
 					return true;

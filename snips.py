@@ -94,7 +94,7 @@ class CLIParser():
     def cmd_build(self):
         with open('build/main.json','w') as h:
             h.write(json.dumps({'snips' : posts }))
-            print('>> done building {} posts'.format(len(posts)))
+            print('>> done building {} snips'.format(len(posts)))
         if self.getArg(2) == 'publish':
             self.cmd_publish()
         else:
