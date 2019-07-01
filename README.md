@@ -1,18 +1,30 @@
 # snips
-Searchable GitHub/Markdown based snippeting blog.
 
-This is a an agregator of *'snips'*, that are little bits of computer-related information.
-*Snips* are built by people writing small markdown files and hosting them on github. A very simple static builder can then be run on their repo, where they can host a static build of their *snips* collection.
+Snips is a serverless, distributed, compact knowledge database. 
 
-The Snips web app can then be run by any client and allows searching over the whole aggregated *snip* database.
+Ever wondered what was that oneliner that saved your ass some time ago ? Those few lines of code that worked really nicely the other day ? 
 
-This was initially aimed at taking notes on every bit of useful information you come accross while coding or working with Linux, because you may need to come back to it.
+*Snips* is a an agregator of little bits ('*snips*') of computer-related information, so that you never lose time looking for those again.
 
 [Try it](https://mortrevere.github.io/snips/) on GitHub Pages
 
-## Roll your own
+### Serverless
 
-Any GitHub repo can become part of the *snip* database. The only condition is to have a valid build up on it.
+Everything, from the client to the *snips* database, is hosted on GitHub. No server to maintain, at all.
+
+### Distributed
+
+Everyone can have a *snips* repo, hosting their precious bits of information. You can then choose a list of repo from where to search from. It could be your own only, or any combination of all the existing *snips* repo.
+
+![database distributed over GitHub](principle.png)
+
+### Compact
+
+The *whole thing* fits into ~500 lines of code and two third party librairies, for a whopping **198kb** of data (**85kb** compressed). The [*snips* web app](https://mortrevere.github.io/snips/) can be run by anyone and allows searching the whole aggregated *snip* database in a few milliseconds.
+
+## Join the *Snips* network
+
+Any GitHub repo can become part of the *Snips* database. The only condition is to have a valid build up on it.
 To do that :
 
 ```
@@ -21,11 +33,11 @@ cd snips
 ./snips.py build
 ```
 
-This builds a JSON file under the `build/` dir, which then become the reference point for your *snip* repo. You can then host it (for free) on GitHub or wherever you see fit if you have a public CORS-compatible domain.
+This builds a JSON file under the `build/` dir, which becomes the reference point for your *snips* repo. You can then host it (for free) on GitHub by simply pushing it.
 
 **Snips are stored into the** `snips/` **dir as simple markdown files.**
 
-They however carry additionnal features like date and tags embedding which allow for better searching. This is cleaned up by the build process and moved as metadata in the final build file.
+They however carry additionnal features like date and tags embedding which allow for efficient searching. This is cleaned up by the build process and moved as metadata in the final build file.
 
 ## Adding snips
 
@@ -45,9 +57,11 @@ git commit -m "new snip"
 git push
 ```
 
-Your build file is now updated on the repo and everyone can browse that new *snip*
+Your build file is now updated on the repo and everyone can find that new *snip*
 
-## New features
+## Other features
+
+*Snips* comes with a simple tool to convert your list of markdown files to a *snips* build.
 
 Current available commands for `snips.py` are :
 
@@ -93,3 +107,4 @@ The `BUILT` column let you know if you have any differences between your local .
 - add `snips.py remove <id>` to remove a snip from the build
 - ~~Multi source implementation~~
 - ~~Add author on each snip~~
+
