@@ -44,7 +44,7 @@
 		<div v-else>
 			<h2 id="latest-title">
 				Search results
-				<span title="# of most relevant snips/total snips matching" id="search-results-count">({{relevantSearchResultsCount}}/{{searchedPosts.length}})</span>
+				<span title="# of most relevant snips/total snips matching" id="search-results-count">({{relevantSearchResultsCount}}/{{searchedPosts.length}}) in {{searchTime}} ms</span>
 			</h2>
 
 			<div v-for="post in searchedPosts" class="post" v-bind:class="{irrelevant : post.relevance < relevanceThreshold}">

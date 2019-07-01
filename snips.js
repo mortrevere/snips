@@ -6,7 +6,8 @@ var vueh = new Vue({
 		posts: [],
 		searchedPosts: [],
 		dataPrefix: 'data:text/markdown;base64, ',
-		searchTerm: '',
+		searchTerm: '', 
+		searchTime: 0,
 		relevanceThreshold : 9,
 		minNumberOfResults : 2,
 		relevantSearchResultsCount : 0
@@ -23,6 +24,7 @@ var vueh = new Vue({
 	},
 	methods: {
 		search: function (ev) {
+			var performance = {start : new Date().getTime(), end : 0};
 			var self = this;
 			if (typeof ev === "string") self.searchTerm = ev;
 			var searchTerm = self.searchTerm.trim();
@@ -66,6 +68,8 @@ var vueh = new Vue({
 			}
 			self.relevantSearchResultsCount = relevance.filter(r => r >= self.relevanceThreshold).length;
 			window.location.hash = self.searchTerm;
+			performance.end = new Date().getTime();
+			self.searchTime = performance.end - performance.start;
 		},
 		clearSearch: function() {
 			this.searchTerm = '';
