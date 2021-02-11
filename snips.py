@@ -86,8 +86,12 @@ class CLIParser():
         git = os.popen('git add build/main.json && git commit -m "new snip" && git push').read()
         print(git)
         remote_url = os.popen('git config --get remote.origin.url').read().split('/')
-        github_user = remote_url[3]
-        repo_name = remote_url[4].split('.')[0]
+        if "git@github.com" in remote_url[0]: #SSH remote
+            github_user = remote_url[0].split(":")[-1]
+            repo_name = remote_url[1].split('.')[0]
+        else:
+            github_user = remote_url[3]
+            repo_name = remote_url[4].split('.')[0]
         branch = os.popen('git rev-parse --abbrev-ref HEAD').read()
         remote_url = 'https://raw.githubusercontent.com/' + '/'.join([github_user,repo_name,branch]).strip() + '/build/main.json'
         print('>> Published @ ' + remote_url)
